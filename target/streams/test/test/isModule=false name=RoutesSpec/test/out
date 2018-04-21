@@ -1,0 +1,6 @@
+[0m[[0minfo[0m] [0m[32mRoutesSpec:[0m[0m
+[0m[[0minfo[0m] [0m[32mServer Routes[0m[0m
+[0m[[0minfo[0m] [0m[31m- should return a greeting for GET request to the root events path *** FAILED ***[0m[0m
+[0m[[0minfo[0m] [0m[31m  Request was rejected (RouteTest.scala:57)[0m[0m
+[0m[[0minfo[0m] [0m[31m- should return event type stats for GET request to the root events path *** FAILED ***[0m[0m
+[0m[[0minfo[0m] [0m[31m  Request was rejected (RouteTest.scala:57)[0m[0m
