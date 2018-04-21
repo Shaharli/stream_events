@@ -1,10 +1,15 @@
 
-import java.io.InputStream
+import java.io.{BufferedReader, InputStream}
+
+import EventsStreamInput.validate
+import Main.eventsStatsRef
 import akka.actor.ActorRef
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import play.api.libs.json.{JsValue, Json}
+
+import scala.util.Try
 
 
 object Main extends App with EventsStatsRoutes with JsonSupport{
@@ -15,14 +20,22 @@ object Main extends App with EventsStatsRoutes with JsonSupport{
 
   val eventsStatsRef: ActorRef = system.actorOf(EventsStatsActor.props, "EventQueueActor")
 
-  // starting server
   Http(system).bindAndHandle(eventsStatsRoutes, "localhost", 9000)
   println(s"Server online at http://localhost:9000/")
 
-  // get input stream from file
-  val process: Process = new ProcessBuilder("src/generator-macosx-amd64").start
-  val processInputStream: InputStream = process.getInputStream
+  readLines(EventsStreamInput.startStream("src/generator-macosx-amd64"))
 
-  eventsStatsRef ! Json.parse(processInputStream).as[EventInfo]
+  def readLines(reader : BufferedReader): Unit = {
+    var line = ""
+
+    while ((line = reader.readLine()) != "") {
+      val eventProcessOpt = Try(validate(Json.parse(line)))
+      if (eventProcessOpt.isSuccess){
+        eventsStatsRef ! Json.parse(line).as[EventInfo]
+      }
+    }
+  }
 
 }
+
+

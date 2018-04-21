@@ -29,8 +29,8 @@ class EventsStatsActor extends Actor with ActorLogging {
 
   import EventsStatsActor._
 
-  val dataCount: mutable.Map[String, Int] = mutable.Map().withDefaultValue(0)
-  val typeCount: mutable.Map[String, Int] = mutable.Map().withDefaultValue(0)
+  var dataCount: mutable.Map[String, Int] = mutable.Map().withDefaultValue(0)
+  var typeCount: mutable.Map[String, Int] = mutable.Map().withDefaultValue(0)
 
   override def receive: Receive = {
 
